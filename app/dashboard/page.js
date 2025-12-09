@@ -6,12 +6,14 @@ import ArtistsWidget from "../components/widgets/ArtistsWidget";
 import GenreWidget from "../components/widgets/GenreWidget";
 import DecadeWidget from "../components/widgets/DecadeWidget";
 import { useState, useEffect } from "react";
+import MoodWidget from "../components/widgets/MoodWidget";
 
 export default function DashboardPage() {
     const [accessToken, setAccessToken] = useState(null);
-    const [selectedArtist, setSelectedArtist] = useState([]);
+    const [selectedArtists, setSelectedArtists] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [selectedDecades, setSelectedDecades] = useState([]);
+    const [selectedMoods, setSelectedMoods] = useState([]);
 
     //Obtiene el token que hay en el localStorage
     useEffect(() => {
@@ -20,7 +22,7 @@ export default function DashboardPage() {
     }, []);
 
     const handleArtistSelect =  (artistas) => {
-        setSelectedArtist(artistas);
+        setSelectedArtists(artistas);
         console.log("Artistas seleccionados: ", artistas);
     }
 
@@ -32,6 +34,11 @@ export default function DashboardPage() {
     const handleDecadeSelect = (decades) => {
         setSelectedDecades(decades);
         console.log("Decadas seleccionadas: ", decades);
+    }
+
+    const handleMoodSelect = (mood) => {
+        setSelectedMoods(mood);
+        console.log("Moods seleccionados: ", mood);
     }
 
     return (
@@ -46,7 +53,7 @@ export default function DashboardPage() {
                     <div className="md:col-span-1 space-y-4">
                         <ArtistsWidget 
                             accessToken={accessToken}
-                            selectedArtists={selectedArtist}
+                            selectedArtists={selectedArtists}
                             onChange={handleArtistSelect}   /*sto es para avisar al padre cuando cambian*/                                          
                         />
                         {/*Aqui van el resto de los widgets*/}
@@ -61,16 +68,34 @@ export default function DashboardPage() {
                             selectedDecades={selectedDecades}
                             onChange={handleDecadeSelect}
                         />
+
+                        <MoodWidget
+                            accessToken={accessToken}
+                            selectedMoods={selectedMoods}
+                            onChange={handleMoodSelect}
+                        />
                     </div>
 
                     {/*Columna para las playlists*/}
-                    <div className="md:col-span-1 space-y-4">
+                    <div className="md:col-span-2 space-y-4">
                         <h2 className="text-2xl font-semibold mb-4">PlayList Generada</h2>
-                            <p>de momento aqui muestro los artistas seleccionados</p>
                         <ul className="mt-4 space-y-2 list-disc list-inside">
-                            {selectedArtist.map((artists) => (
+                            Artistas:{" "}
+                            {selectedArtists.map((artists) => (
                                 <li key={artists.id}>{artists.name}</li>
                             ))}
+                            <li>
+                             Generos:{" "}
+                             {selectedGenres.length > 0 ? selectedGenres.join(" ") : "ninguno"}
+                            </li>
+                            <li>
+                             Decadas:{" "}
+                             {selectedDecades.length > 0 ? selectedDecades.join(" ") : "ninguna"}
+                            </li>
+                            <li>
+                             Mood:{" "}
+                             {selectedMoods.length > 0 ? selectedMoods.join(" ") : "ninguno"}
+                            </li>
                         </ul>
                     </div>
                 </div>
