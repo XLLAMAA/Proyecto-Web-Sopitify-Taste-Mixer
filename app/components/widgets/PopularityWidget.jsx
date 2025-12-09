@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-export default function MoodWidget({ selectedMoods, onChange }) {
-  const [valor, setValor] = useState([]);
+export default function PopularityWidget({ selectedPopularity, onChange }) {
+  const [valor, setValor] = useState(50);
 
   const handleChange = (nuevoValor) => {
     setValor(nuevoValor);
