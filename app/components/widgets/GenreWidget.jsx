@@ -2,15 +2,16 @@
 
 import { useState, useEffect } from "react";
 
-const FULL_GENEROS = [
+// Lista local de generos por si la API falla
+const FullGeneros = [
   "pop",
   "rock",
   "indie",
-  "rap español",
+  "rap espanol",
   "tecno",
   "hard core",
   "reggaeton",
-  "hip-hop",
+  "hip hop",
   "trap",
   "edm",
   "latin",
@@ -21,10 +22,10 @@ const FULL_GENEROS = [
 ];
 
 export default function GenreWidget({ accessToken, selectedGenres, onChange }) {
-  const [generos, setGeneros] = useState(FULL_GENEROS);
+  const [generos, setGeneros] = useState(FullGeneros);
   const [error, setError] = useState(null);
 
-  // Intento cargar los géneros reales de Spotify (si falla, me quedo con FULL_GENEROS)
+  // Cargo los generos de spotify
   useEffect(() => {
     const buscarGeneros = async () => {
       if (!accessToken) return;
@@ -39,70 +40,76 @@ export default function GenreWidget({ accessToken, selectedGenres, onChange }) {
           }
         );
 
-        const data = await respuesta.json();
-
+        // Si la respuesta no es ok no intento hacer json
         if (!respuesta.ok) {
-          console.log("No se han podido cargar los géneros desde Spotify:", data);
-          // No hago setGeneros para quedarme con la lista local
-          return;
+          const texto = await respuesta.text();
+          console.log(
+            "Error al cargar generos desde spotify usando lista local",
+            respuesta.status,
+            texto
+          );
+          return; // me quedo con FullGeneros
         }
+
+        const data = await respuesta.json();
 
         if (Array.isArray(data.genres) && data.genres.length > 0) {
           setGeneros(data.genres);
         }
       } catch (err) {
-        console.error("Error de red al buscar géneros:", err);
-        setError("Error de red al buscar géneros.");
+        console.error("Error de red al buscar generos", err);
+        setError("Error de red al buscar generos");
       }
     };
 
     buscarGeneros();
   }, [accessToken]);
 
-  const toggleGenre = (genre) => {
-    const yaSeleccionado = selectedGenres.includes(genre);
+  // Seleccionar o deseleccionar un genero
+  const toggleGenero = (genero) => {
+    const yaSeleccionado = selectedGenres.includes(genero);
 
     const nuevaSeleccion = yaSeleccionado
-      ? selectedGenres.filter((g) => g !== genre) // si estaba, lo quito
-      : [...selectedGenres, genre]; // si no estaba, lo añado
+      ? selectedGenres.filter((g) => g !== genero) // lo quito si ya estaba
+      : [...selectedGenres, genero]; // lo anado si no estaba
 
     onChange(nuevaSeleccion);
   };
 
-  const isSelected = (genre) => selectedGenres.includes(genre);
+  const isSelected = (genero) => selectedGenres.includes(genero);
 
   return (
     <div className="bg-zinc-900 p-4 rounded-lg w-full shadow-lg border border-zinc-800">
-      <h3 className="text-xl font-semibold mb-3 text-blue-400">Géneros</h3>
+      <h3 className="text-xl font-semibold mb-3 text-blue-400">Generos</h3>
 
       <p className="text-xs text-zinc-400 mb-2">
-        Selecciona uno o varios géneros. Se usarán como base para generar la playlist.
+        Selecciona uno o varios generos para la playlist
       </p>
 
       {error && <p className="text-xs text-red-400 mb-2">{error}</p>}
 
       <div className="flex flex-wrap gap-2 max-h-40 overflow-y-auto text-xs">
-        {generos.map((genre) => (
+        {generos.map((genero) => (
           <button
-            key={genre}
+            key={genero}
             type="button"
-            onClick={() => toggleGenre(genre)}
+            onClick={() => toggleGenero(genero)}
             className={`px-3 py-1 rounded-full capitalize border transition ${
-              isSelected(genre)
+              isSelected(genero)
                 ? "bg-blue-500 text-white border-blue-400"
                 : "bg-zinc-800 text-zinc-200 border-zinc-600 hover:bg-zinc-700"
             }`}
           >
-            {genre}
+            {genero}
           </button>
         ))}
       </div>
 
       {selectedGenres.length > 0 && (
         <p className="mt-3 text-xs text-zinc-300">
-          Géneros seleccionados:{" "}
+          Generos seleccionados:{" "}
           <span className="font-semibold">
-            {selectedGenres.join(", ")}
+            {selectedGenres.join(" ")}
           </span>
         </p>
       )}

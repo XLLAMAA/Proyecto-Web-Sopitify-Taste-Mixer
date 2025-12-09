@@ -3,13 +3,15 @@
 "use client";
 
 import ArtistsWidget from "../components/widgets/ArtistsWidget";
+import GenreWidget from "../components/widgets/GenreWidget";
 import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
     const [accessToken, setAccessToken] = useState(null);
     const [selectedArtist, setSelectedArtist] = useState([]);
+    const [selectedGenres, setSelectedGenres] = useState([]);
 
-    {/*Obtiene el token que hay en el localStorage */}
+    //Obtiene el token que hay en el localStorage
     useEffect(() => {
         const token = localStorage.getItem("spotify_access_token");
         setAccessToken(token);
@@ -18,6 +20,11 @@ export default function DashboardPage() {
     const handleArtistSelect =  (artistas) => {
         setSelectedArtist(artistas);
         console.log("Artistas seleccionados: ", artistas);
+    }
+
+    const handleGenreSelect = (generos) => {
+        setSelectedGenres(generos);
+        console.log("Generos seleccionados: ", generos);
     }
 
     return (
@@ -36,6 +43,11 @@ export default function DashboardPage() {
                             onChange={handleArtistSelect}   /*sto es para avisar al padre cuando cambian*/                                          
                         />
                         {/*Aqui van el resto de los widgets*/}
+                        <GenreWidget
+                            accessToken={accessToken}
+                            selectedGenres={selectedGenres}
+                            onChange={handleGenreSelect}
+                        />  
                     </div>
 
                     {/*Columna para las playlists*/}
