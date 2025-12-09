@@ -77,8 +77,8 @@ export default function ArtistsWidget ({ accessToken, selectedArtists, onChange 
 
 }
 
-  const isSelected = (artist) => {
-    return selectedArtists.some((a) => a.id === artist.id);
+  const isSelected = (artistId) => {
+    return selectedArtists.some((a) => a.id === artistId);
   }
 
   return (
@@ -99,7 +99,7 @@ export default function ArtistsWidget ({ accessToken, selectedArtists, onChange 
     </form>
 
       {isLoading && <p className="text-sm text-zinc-300">Buscando...</p>}
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-yellow-800">{error}</p>}
 
       <ul className="mt-2 space-y-1 max-h-60 overflow-y-auto text-sm">
         {results.map((artist) => (
@@ -107,7 +107,7 @@ export default function ArtistsWidget ({ accessToken, selectedArtists, onChange 
             key={artist.id}
             className={`flex items-center justify-between px-2 py-1 rounded cursor-pointer ${
               isSelected(artist.id) 
-               ? "bg-green-700 hover:bg-green-600"
+               ? "bg-yellow-600 hover:bg-red-400 border-yellow-600"
                 : "bg-zinc-800 hover:bg-zinc-700"
             }`}
             onClick={() => toggleArtist(artist)}
