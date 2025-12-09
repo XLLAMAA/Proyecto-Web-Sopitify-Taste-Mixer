@@ -5,8 +5,9 @@
 import ArtistsWidget from "../components/widgets/ArtistsWidget";
 import GenreWidget from "../components/widgets/GenreWidget";
 import DecadeWidget from "../components/widgets/DecadeWidget";
-import { useState, useEffect } from "react";
 import MoodWidget from "../components/widgets/MoodWidget";
+import PopularityWidget from "../components/widgets/PopularityWidget";
+import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
     const [accessToken, setAccessToken] = useState(null);
@@ -14,6 +15,7 @@ export default function DashboardPage() {
     const [selectedGenres, setSelectedGenres] = useState([]);
     const [selectedDecades, setSelectedDecades] = useState([]);
     const [selectedMoods, setSelectedMoods] = useState([]);
+    const [selectedPopularity, setSelectedPopularity] = useState(50);
 
     //Obtiene el token que hay en el localStorage
     useEffect(() => {
@@ -40,6 +42,19 @@ export default function DashboardPage() {
         setSelectedMoods(mood);
         console.log("Moods seleccionados: ", mood);
     }
+
+    const handlePopularitySelect = (popularity) => {
+        setSelectedPopularity(popularity);
+        console.log("Popularidad seleccionada: ", popularity);
+    }
+
+    //Para que me sea mas sencillo mostrar la popularidad en texto
+    const getPopularityLabel = (valor) => {
+     if (valor < 30) return "underground";
+     if (valor < 70) return "conocidas";
+     return "muy quemadas";
+    };
+
 
     return (
         <main className="min-h-screen flex flex-col items-center justify-center bg-black text-white">
@@ -74,6 +89,11 @@ export default function DashboardPage() {
                             selectedMoods={selectedMoods}
                             onChange={handleMoodSelect}
                         />
+                        <PopularityWidget
+                            accessToken={accessToken}
+                            selectedPopularity={selectedPopularity}
+                            onChange={handlePopularitySelect}
+                        />
                     </div>
 
                     {/*Columna para las playlists*/}
@@ -85,16 +105,20 @@ export default function DashboardPage() {
                                 <li key={artists.id}>{artists.name}</li>
                             ))}
                             <li>
-                             Generos:{" "}
-                             {selectedGenres.length > 0 ? selectedGenres.join(" ") : "ninguno"}
+                                Generos:{" "}
+                                 {selectedGenres.length > 0 ? selectedGenres.join(" ") : "ninguno"}
                             </li>
                             <li>
-                             Decadas:{" "}
-                             {selectedDecades.length > 0 ? selectedDecades.join(" ") : "ninguna"}
+                                Decadas:{" "}
+                                 {selectedDecades.length > 0 ? selectedDecades.join(" ") : "ninguna"}
                             </li>
                             <li>
-                             Mood:{" "}
-                             {selectedMoods.length > 0 ? selectedMoods.join(" ") : "ninguno"}
+                                 Mood:{" "}
+                                 {selectedMoods.length > 0 ? selectedMoods.join(" ") : "ninguno"}
+                            </li>
+                            <li>
+                                Popularidad: {" "}
+                                {selectedPopularity} {getPopularityLabel(selectedPopularity)}
                             </li>
                         </ul>
                     </div>
