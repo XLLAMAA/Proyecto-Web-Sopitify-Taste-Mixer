@@ -4,12 +4,14 @@
 
 import ArtistsWidget from "../components/widgets/ArtistsWidget";
 import GenreWidget from "../components/widgets/GenreWidget";
+import DecadeWidget from "../components/widgets/DecadeWidget";
 import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
     const [accessToken, setAccessToken] = useState(null);
     const [selectedArtist, setSelectedArtist] = useState([]);
     const [selectedGenres, setSelectedGenres] = useState([]);
+    const [selectedDecades, setSelectedDecades] = useState([]);
 
     //Obtiene el token que hay en el localStorage
     useEffect(() => {
@@ -25,6 +27,11 @@ export default function DashboardPage() {
     const handleGenreSelect = (generos) => {
         setSelectedGenres(generos);
         console.log("Generos seleccionados: ", generos);
+    }
+
+    const handleDecadeSelect = (decades) => {
+        setSelectedDecades(decades);
+        console.log("Decadas seleccionadas: ", decades);
     }
 
     return (
@@ -48,6 +55,12 @@ export default function DashboardPage() {
                             selectedGenres={selectedGenres}
                             onChange={handleGenreSelect}
                         />  
+
+                        <DecadeWidget
+                            accessToken={accessToken}
+                            selectedDecades={selectedDecades}
+                            onChange={handleDecadeSelect}
+                        />
                     </div>
 
                     {/*Columna para las playlists*/}
