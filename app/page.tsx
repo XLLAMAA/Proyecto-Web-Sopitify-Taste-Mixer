@@ -36,7 +36,7 @@ export default function Home(): JSX.Element {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-black text-green-600">
+    <main className="min-h-screen flex flex-col items-center justify-center text-green-600 bg-gradient-to-b from-black via-zinc-900 to-emerald-900">
       <h1 className="text-3xl font-bold mb-4">Spotify Taste Mixer</h1>
       <p className="mb-6 text-center max-w-md">Aplicacion web para generar playlist personalizadas en funcion de tus gustos, tanto de artistas, generos...</p>
       <button onClick={(handleLogin)} 
