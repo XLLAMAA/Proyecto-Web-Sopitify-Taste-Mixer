@@ -4,21 +4,16 @@ import { useState, useEffect } from "react";
 
 // Lista local de generos por si la API falla
 const FullGeneros = [
-  "pop",
   "rock",
+  "pop",
+  "spanish",
+  "hip-hop",
   "indie",
-  "rap espanol",
-  "tecno",
-  "hard core",
   "reggaeton",
-  "hip hop",
-  "trap",
-  "edm",
-  "latin",
-  "metal",
-  "jazz",
+  "electronic",
+  "dance",
   "r&b",
-  "soul",
+  "jazz"
 ];
 
 export default function GenreWidget({ accessToken, selectedGenres, onChange }) {

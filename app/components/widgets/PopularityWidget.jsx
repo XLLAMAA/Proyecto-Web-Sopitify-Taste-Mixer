@@ -10,6 +10,7 @@ export default function PopularityWidget({ selectedPopularity, onChange }) {
     onChange(nuevoValor);
   }
 
+  //Para obtener el numero de popularidad
   const getLabel = (valor) => {
     if (valor < 30) return "underground";
     if (valor < 70) return "conocidas";
