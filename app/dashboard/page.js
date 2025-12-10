@@ -208,7 +208,7 @@ export default function DashboardPage() {
     };
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-black text-white">
+    <main className="min-h-screen flex flex-col items-center justify-center text-white bg-gradient-to-b from-black via-zinc-900 to-emerald-900">
       <Header onLogout={handleLogout} />
 
       {!accessToken ? (
@@ -246,10 +246,10 @@ export default function DashboardPage() {
 
           {/* Columna para la playlist */}
           <div className="md:col-span-2 space-y-4">
-            <h2 className="text-2xl font-semibold mb-4">PlayList generada</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-green-700 shadow-lg">PlayList generada</h2>
             <button
               onClick={generarPlaylists}
-              className="mt-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+              className="mt-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition font-semibold shadow-lg"
             >
               Generar playlist
             </button>
