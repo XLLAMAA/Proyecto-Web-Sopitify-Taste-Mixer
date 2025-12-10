@@ -7,6 +7,7 @@ import GenreWidget from "../components/widgets/GenreWidget";
 import DecadeWidget from "../components/widgets/DecadeWidget";
 import MoodWidget from "../components/widgets/MoodWidget";
 import PopularityWidget from "../components/widgets/PopularityWidget";
+import PlaylistDisplay from "../components/PlayListDisplay";
 import { useState, useEffect } from "react";
 
 export default function DashboardPage() {
@@ -17,6 +18,7 @@ export default function DashboardPage() {
   const [selectedMoods, setSelectedMoods] = useState([]);
   const [selectedPopularity, setSelectedPopularity] = useState(50);
   const [recommendedTracks, setRecommendedTracks] = useState([]);
+  const [favoritos, setFavoritos] = useState([]);
 
   //Obtiene el token que hay en el localStorage
   useEffect(() => {
@@ -49,6 +51,22 @@ export default function DashboardPage() {
     setSelectedPopularity(popularity);
     console.log("Popularidad seleccionada:", popularity);
   };
+
+  const handleRemoveTrack = (track) => {
+  setRecommendedTracks((prev) => prev.filter((t) => t.id !== track.id));
+};
+
+  const handleToggleFavorite = (track) => {
+  setFavoritos((prev) => {
+    const yaEsta = prev.some((t) => t.id === track.id);
+    if (yaEsta) {
+      return prev.filter((t) => t.id !== track.id);
+    } else {
+      return [...prev, track];
+    }
+  });
+};
+
 
   // Para mostrar la popularidad en texto
   const getPopularityLabel = (valor) => {
@@ -213,62 +231,57 @@ export default function DashboardPage() {
               onChange={handlePopularitySelect}
             />
           </div>
+    {/*Columna para las playlists*/}
+    <div className="md:col-span-2 space-y-4">
+    <h2 className="text-2xl font-semibold mb-4">PlayList generada</h2>
+    <button
+        onClick={generarPlaylists}
+        className="mt-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+    >
+        Generar playlist
+    </button>
 
-          {/* Columna para la playlist */}
-          <div className="md:col-span-2 space-y-4">
-            <h2 className="text-2xl font-semibold mb-4">PlayList generada</h2>
-            <button
-              onClick={generarPlaylists}
-              className="mt-1 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            >
-              Generar playlist
-            </button>
+    {recommendedTracks.length > 0 ? (
+        <PlaylistDisplay
+        tracks={recommendedTracks}
+        onRemoveTrack={handleRemoveTrack}
+        favoriteTracks={favoritos}
+        onToggleFavorite={handleToggleFavorite}
+        />
 
-            {recommendedTracks.length > 0 ? (
-              <ul className="mt-4 space-y-2 list-disc list-inside">
-                {recommendedTracks.map((track) => (
-                  <li key={track.id}>
-                    {track.name}{" "}
-                    <span className="text-xs text-zinc-400">
-                      - {track.artists.map((a) => a.name).join(" ")}{" "}
-                      (pop {track.popularity})
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <ul className="mt-4 space-y-2 list-disc list-inside">
-                <li>
-                  Artistas:{" "}
-                  {selectedArtists.length > 0
-                    ? selectedArtists.map((a) => a.name).join(" ")
-                    : "ninguno"}
-                </li>
-                <li>
-                  Generos:{" "}
-                  {selectedGenres.length > 0
-                    ? selectedGenres.join(" ")
-                    : "ninguno"}
-                </li>
-                <li>
-                  Decadas:{" "}
-                  {selectedDecades.length > 0
-                    ? selectedDecades.join(" ")
-                    : "ninguna"}
-                </li>
-                <li>
-                  Mood:{" "}
-                  {selectedMoods.length > 0
-                    ? selectedMoods.join(" ")
-                    : "ninguno"}
-                </li>
-                <li>
-                  Popularidad:{" "}
-                  {selectedPopularity} {getPopularityLabel(selectedPopularity)}
-                </li>
-              </ul>
-            )}
-          </div>
+    ) : (
+        <ul className="mt-4 space-y-2 list-disc list-inside">
+        <li>
+            Artistas:{" "}
+            {selectedArtists.length > 0
+            ? selectedArtists.map((a) => a.name).join(" ")
+            : "ninguno"}
+        </li>
+        <li>
+            Generos:{" "}
+            {selectedGenres.length > 0
+            ? selectedGenres.join(" ")
+            : "ninguno"}
+        </li>
+        <li>
+            Decadas:{" "}
+            {selectedDecades.length > 0
+            ? selectedDecades.join(" ")
+            : "ninguna"}
+        </li>
+        <li>
+            Mood:{" "}
+            {selectedMoods.length > 0
+            ? selectedMoods.join(" ")
+            : "ninguno"}
+        </li>
+        <li>
+            Popularidad:{" "}
+            {selectedPopularity} {getPopularityLabel(selectedPopularity)}
+        </li>
+        </ul>
+    )}
+    </div>
         </div>
       )}
     </main>
